@@ -22,7 +22,7 @@ MIME_TYPES = {
 def mimetype(file):
     """Read MIME type from file"""
     try:
-        mimetype_ = from_file(file, mime=True)
+        return from_file(file, mime=True)
     except (OSError, TypeError, ValueError):
         try:
             data = file.read()
@@ -30,22 +30,16 @@ def mimetype(file):
             return from_buffer(file, mime=True)
         else:
             return from_buffer(data, mime=True)
-    else:
-        return mimetype_
 
 
 def getext(mimetype_or_file):
     """Read probably fitting extension from file"""
     try:
-        extension = MIME_TYPES[mimetype_or_file]
+        return MIME_TYPES[mimetype_or_file]
     except KeyError:
         mime_type = mimetype(mimetype_or_file)
 
         try:
-            extension = MIME_TYPES[mime_type]
+            return MIME_TYPES[mime_type]
         except KeyError:
             return guess_extension(mime_type) or ''
-        else:
-            return extension
-    else:
-        return extension

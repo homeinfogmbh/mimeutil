@@ -11,4 +11,4 @@ setup(
     maintainer_email='r.neumann@homeinfo.de',
     py_modules=['mimeutil'],
     license='GPLv3',
-    description='A MIME type and file extension library')
+    description='A MIME type and file extension library.')

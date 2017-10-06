@@ -1,4 +1,4 @@
-"""MIME type and file extension handling"""
+"""MIME type and file extensions handling."""
 
 from mimetypes import guess_extension
 from magic import from_file, from_buffer
@@ -20,7 +20,8 @@ MIME_TYPES = {
 
 
 def mimetype(file):
-    """Read MIME type from file"""
+    """Guess MIME type of file."""
+
     try:
         return from_file(file, mime=True)
     except (OSError, TypeError, ValueError):
@@ -33,7 +34,8 @@ def mimetype(file):
 
 
 def getext(mimetype_or_file):
-    """Read probably fitting extension from file"""
+    """Guess a file suffix for the MIME type or file."""
+
     try:
         return MIME_TYPES[mimetype_or_file]
     except KeyError:

@@ -36,10 +36,10 @@ def mimetype(file):
             return from_buffer(data, mime=True)
 
 
-def getext(mimetype_or_file):
+def getext(file):
     """Guess a file suffix for the MIME type or file."""
 
-    mime_type = mimetype(mimetype_or_file)
+    mime_type = mimetype(file)
 
     try:
         return MIME_TYPES[mime_type]

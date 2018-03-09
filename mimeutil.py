@@ -1,5 +1,8 @@
 """MIME type and file extensions handling."""
 
+from collections import namedtuple
+from hashlib import sha256
+
 from mimetypes import guess_extension
 from magic import from_file, from_buffer
 
@@ -36,12 +39,18 @@ def mimetype(file):
 def getext(mimetype_or_file):
     """Guess a file suffix for the MIME type or file."""
 
-    try:
-        return MIME_TYPES[mimetype_or_file]
-    except KeyError:
-        mime_type = mimetype(mimetype_or_file)
+    mime_type = mimetype(mimetype_or_file)
 
-        try:
-            return MIME_TYPES[mime_type]
-        except KeyError:
-            return guess_extension(mime_type) or ''
+    try:
+        return MIME_TYPES[mime_type]
+    except KeyError:
+        return guess_extension(mime_type) or ''
+
+
+class FileMetaData(namedtuple('FileMetaData', 'sha256sum mimetype suffix')):
+    """Represents file meta data."""
+
+    @classmethod
+    def from_bytes(cls, data):
+        """Creates file meta data from the respective bytes."""
+        return cls(sha256(data).hexdigest(), mimetype(data), getext(data))

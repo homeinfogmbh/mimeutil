@@ -50,6 +50,8 @@ def getext(file):
 class FileMetaData(namedtuple('FileMetaData', 'sha256sum mimetype suffix')):
     """Represents file meta data."""
 
+    __slots__ = ()
+
     @classmethod
     def from_bytes(cls, data):
         """Creates file meta data from the respective bytes."""

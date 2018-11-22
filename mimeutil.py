@@ -56,3 +56,8 @@ class FileMetaData(namedtuple('FileMetaData', 'sha256sum mimetype suffix')):
     def from_bytes(cls, data):
         """Creates file meta data from the respective bytes."""
         return cls(sha256(data).hexdigest(), mimetype(data), getext(data))
+
+    @property
+    def filename(self):
+        """Returns a unique file name from the SHA-256 hash and suffix."""
+        return self.sha256sum + self.suffix

@@ -2,8 +2,8 @@
 
 from collections import namedtuple
 from hashlib import sha256
-
 from mimetypes import guess_extension
+
 from magic import from_file, from_buffer
 
 __all__ = ['MIME_TYPES', 'mimetype', 'getext', 'FileMetaData']

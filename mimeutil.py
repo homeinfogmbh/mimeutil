@@ -2,14 +2,17 @@
 
 from collections import namedtuple
 from hashlib import sha256
+from io import BufferedIOBase, IOBase, RawIOBase, TextIOBase
 from mimetypes import guess_extension
+from pathlib import Path
 
-from magic import from_file, from_buffer    # pylint: disable=E0401
+from magic import detect_from_content, detect_from_filename, detect_from_fobj
 
 
 __all__ = ['MIME_TYPES', 'mimetype', 'getext', 'FileMetaData']
 
 
+FILE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
 MIME_TYPES = {
     'image/jpeg': '.jpg',
     'image/png': '.png',
@@ -26,15 +29,18 @@ MIME_TYPES = {
 def mimetype(file):
     """Guess MIME type of file."""
 
-    try:
-        return from_file(file, mime=True)
-    except (OSError, TypeError, ValueError):
-        try:
-            data = file.read()
-        except AttributeError:
-            return from_buffer(file, mime=True)
-        else:
-            return from_buffer(data, mime=True)
+    if isinstance(file, bytes):
+        file_magic = detect_from_content(file)
+    elif isinstance(file, str):
+        file_magic = detect_from_filename(file)
+    elif isinstance(file, Path):
+        file_magic = detect_from_filename(str(file))
+    elif isinstance(file, FILE_OBJECTS):
+        file_magic = detect_from_fobj(str(file))
+    else:
+        raise ValueError('Cannot read MIME type from %s.' % type(file))
+
+    return file_magic.mime_type
 
 
 def getext(file):

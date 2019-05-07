@@ -26,21 +26,31 @@ MIME_TYPES = {
     'text/html': '.html'}
 
 
+def _file_magic(file):
+    """Returns the file magic namedtuple from the respective file."""
+
+    if isinstance(file, bytes):
+        return detect_from_content(file)
+
+    if isinstance(file, str):
+        return _file_magic(Path(file))
+
+    if isinstance(file, Path):
+        if file.is_file():
+            return detect_from_filename(str(file))
+
+        raise FileNotFoundError(str(file))
+
+    if isinstance(file, FILE_OBJECTS):
+        return detect_from_fobj(file)
+
+    raise ValueError('Cannot read MIME type from %s.' % type(file))
+
+
 def mimetype(file):
     """Guess MIME type of file."""
 
-    if isinstance(file, bytes):
-        file_magic = detect_from_content(file)
-    elif isinstance(file, str):
-        file_magic = detect_from_filename(file)
-    elif isinstance(file, Path):
-        file_magic = detect_from_filename(str(file))
-    elif isinstance(file, FILE_OBJECTS):
-        file_magic = detect_from_fobj(str(file))
-    else:
-        raise ValueError('Cannot read MIME type from %s.' % type(file))
-
-    return file_magic.mime_type
+    return _file_magic(file).mime_type
 
 
 def getext(file):

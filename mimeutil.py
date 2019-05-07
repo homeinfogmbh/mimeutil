@@ -1,10 +1,10 @@
 """MIME type and file extensions handling."""
 
-from collections import namedtuple
 from hashlib import sha256
 from io import BufferedIOBase, IOBase, RawIOBase, TextIOBase
 from mimetypes import guess_extension
 from pathlib import Path
+from typing import NamedTuple
 
 from magic import detect_from_content, detect_from_filename, detect_from_fobj
 
@@ -64,10 +64,12 @@ def getext(file):
         return guess_extension(mime_type) or ''
 
 
-class FileMetaData(namedtuple('FileMetaData', 'sha256sum mimetype suffix')):
+class FileMetaData(NamedTuple):
     """Represents file meta data."""
 
-    __slots__ = ()
+    sha256sum: str
+    mimetype: str
+    suffix: str
 
     @classmethod
     def from_bytes(cls, data):

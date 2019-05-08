@@ -9,7 +9,7 @@ from typing import NamedTuple
 from magic import detect_from_content, detect_from_filename, detect_from_fobj
 
 
-__all__ = ['MIME_TYPES', 'mimetype', 'getext', 'FileMetaData']
+__all__ = ['MIME_TYPES', 'mimetype', 'getext', 'is_xml', 'FileMetaData']
 
 
 FILE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
@@ -24,6 +24,7 @@ MIME_TYPES = {
     'application/pdf': '.pdf',
     'application/xml': '.xml',
     'text/html': '.html'}
+XML_MIMETYPES = {'application/xml', 'text/xml'}
 
 
 def _file_magic(file):
@@ -62,6 +63,12 @@ def getext(file):
         return MIME_TYPES[mime_type]
     except KeyError:
         return guess_extension(mime_type) or ''
+
+
+def is_xml(file):
+    """Determines whether the file is an XML file."""
+
+    return mimetype(file) in XML_MIMETYPES
 
 
 class FileMetaData(NamedTuple):

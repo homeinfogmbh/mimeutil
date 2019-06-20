@@ -31,8 +31,7 @@ def _file_magic(file):
     """Returns the file magic namedtuple from the respective file."""
 
     if isinstance(file, bytes):
-        # Reading huge files can cause exceptions.
-        return detect_from_content(file[:1024])
+        return detect_from_content(file[:1024])     # Fix issue #350.
 
     if isinstance(file, str):
         return _file_magic(Path(file))

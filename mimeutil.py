@@ -72,10 +72,10 @@ def mimetype_to_ext(mime_type):
         return guess_extension(mime_type) or ''
 
 
-def getext(file_or_mimetype):
-    """Guess a file suffix for the MIME type or file."""
+def getext(file):
+    """Guess a file suffix for the given file."""
 
-    return mimetype_to_ext(mimetype(file_or_mimetype))
+    return mimetype_to_ext(mimetype(file))
 
 
 def is_xml(file):

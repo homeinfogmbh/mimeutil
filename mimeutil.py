@@ -9,11 +9,18 @@ from typing import NamedTuple
 from magic import detect_from_content, detect_from_filename, detect_from_fobj
 
 
-__all__ = ['MIME_TYPES', 'mimetype', 'getext', 'is_xml', 'FileMetaData']
+__all__ = [
+    'MIME_TYPES',
+    'mimetype',
+    'mimetype_to_ext',
+    'getext',
+    'is_xml',
+    'FileMetaData'
+]
 
 
 FILE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
-MIME_TYPES = {
+MIME_TYPES = {  # Most common MIME types for fast lookup.
     'image/jpeg': '.jpg',
     'image/png': '.png',
     'image/gif': '.gif',
@@ -23,7 +30,9 @@ MIME_TYPES = {
     'video/x-flv': '.flv',
     'application/pdf': '.pdf',
     'application/xml': '.xml',
-    'text/html': '.html'}
+    'text/html': '.html',
+    'text/xml': '.xml'
+}
 XML_MIMETYPES = {'application/xml', 'text/xml'}
 
 
@@ -45,7 +54,7 @@ def _file_magic(file):
     if isinstance(file, FILE_OBJECTS):
         return detect_from_fobj(file)
 
-    raise ValueError('Cannot read MIME type from %s.' % type(file))
+    raise TypeError('Cannot read MIME type from %s.' % type(file))
 
 
 def mimetype(file):
@@ -54,18 +63,19 @@ def mimetype(file):
     return _file_magic(file).mime_type
 
 
-def getext(file_or_mimetype):
-    """Guess a file suffix for the MIME type or file."""
-
-    if isinstance(file_or_mimetype, str):
-        mime_type = file_or_mimetype
-    else:
-        mime_type = mimetype(file_or_mimetype)
+def mimetype_to_ext(mime_type):
+    """Returns the extension for a given MIME type."""
 
     try:
         return MIME_TYPES[mime_type]
     except KeyError:
         return guess_extension(mime_type) or ''
+
+
+def getext(file_or_mimetype):
+    """Guess a file suffix for the MIME type or file."""
+
+    return mimetype_to_ext(mimetype(file_or_mimetype))
 
 
 def is_xml(file):

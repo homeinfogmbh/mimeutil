@@ -54,10 +54,13 @@ def mimetype(file):
     return _file_magic(file).mime_type
 
 
-def getext(file):
+def getext(file_or_mimetype):
     """Guess a file suffix for the MIME type or file."""
 
-    mime_type = mimetype(file)
+    if isinstance(file_or_mimetype, str):
+        mime_type = file_or_mimetype
+    else:
+        mime_type = mimetype(file_or_mimetype)
 
     try:
         return MIME_TYPES[mime_type]

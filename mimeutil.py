@@ -57,7 +57,7 @@ def _file_magic(file: File) -> FileMagic:
     if isinstance(file, FILE_LIKE_OBJECTS):
         return detect_from_fobj(file)
 
-    raise TypeError('Cannot read MIME type from %s.' % type(file))
+    raise TypeError(f'Cannot read MIME type from {type(file)}.')
 
 
 def mimetype(file: File) -> str:

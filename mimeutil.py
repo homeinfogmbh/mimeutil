@@ -1,12 +1,14 @@
 """MIME type and file extensions handling."""
 
+from __future__ import annotations
 from hashlib import sha256
 from io import BufferedIOBase, IOBase, RawIOBase, TextIOBase
 from mimetypes import guess_extension
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, Union
 
 from magic import detect_from_content, detect_from_filename, detect_from_fobj
+from magic.compat import FileMagic
 
 
 __all__ = [
@@ -19,7 +21,7 @@ __all__ = [
 ]
 
 
-FILE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
+FILE_LIKE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
 MIME_TYPES = {  # Most common MIME types for fast lookup.
     'image/jpeg': '.jpg',
     'image/png': '.png',
@@ -34,9 +36,10 @@ MIME_TYPES = {  # Most common MIME types for fast lookup.
     'text/xml': '.xml'
 }
 XML_MIMETYPES = {'application/xml', 'text/xml'}
+File = Union[bytes, str, Path, BufferedIOBase, IOBase, RawIOBase, TextIOBase]
 
 
-def _file_magic(file):
+def _file_magic(file: File) -> FileMagic:
     """Returns the file magic namedtuple from the respective file."""
 
     if isinstance(file, bytes):
@@ -51,19 +54,19 @@ def _file_magic(file):
 
         raise FileNotFoundError(str(file))
 
-    if isinstance(file, FILE_OBJECTS):
+    if isinstance(file, FILE_LIKE_OBJECTS):
         return detect_from_fobj(file)
 
     raise TypeError('Cannot read MIME type from %s.' % type(file))
 
 
-def mimetype(file):
+def mimetype(file: File) -> str:
     """Guess MIME type of file."""
 
     return _file_magic(file).mime_type
 
 
-def mimetype_to_ext(mime_type):
+def mimetype_to_ext(mime_type: str) -> str:
     """Returns the extension for a given MIME type."""
 
     try:
@@ -72,13 +75,13 @@ def mimetype_to_ext(mime_type):
         return guess_extension(mime_type) or ''
 
 
-def getext(file):
+def getext(file: File) -> str:
     """Guess a file suffix for the given file."""
 
     return mimetype_to_ext(mimetype(file))
 
 
-def is_xml(file):
+def is_xml(file: File) -> bool:
     """Determines whether the file is an XML file."""
 
     return mimetype(file) in XML_MIMETYPES
@@ -92,11 +95,11 @@ class FileMetaData(NamedTuple):
     suffix: str
 
     @classmethod
-    def from_bytes(cls, data):
+    def from_bytes(cls, data: bytes) -> FileMetaData:
         """Creates file meta data from the respective bytes."""
         return cls(sha256(data).hexdigest(), mimetype(data), getext(data))
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         """Returns a unique file name from the SHA-256 hash and suffix."""
         return self.sha256sum + self.suffix

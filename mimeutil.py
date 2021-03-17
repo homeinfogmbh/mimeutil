@@ -12,7 +12,7 @@ from magic.compat import FileMagic
 
 
 __all__ = [
-    'MIME_TYPES',
+    'FILE_EXTENSIONS',
     'mimetype',
     'mimetype_to_ext',
     'getext',
@@ -22,7 +22,7 @@ __all__ = [
 
 
 FILE_LIKE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
-MIME_TYPES = {  # Most common MIME types for fast lookup.
+FILE_EXTENSIONS = {  # Most common MIME types for fast lookup.
     'image/jpeg': '.jpg',
     'image/png': '.png',
     'image/gif': '.gif',
@@ -35,6 +35,7 @@ MIME_TYPES = {  # Most common MIME types for fast lookup.
     'text/html': '.html',
     'text/xml': '.xml'
 }
+
 XML_MIMETYPES = {'application/xml', 'text/xml'}
 File = Union[bytes, str, Path, BufferedIOBase, IOBase, RawIOBase, TextIOBase]
 
@@ -70,7 +71,7 @@ def mimetype_to_ext(mime_type: str) -> str:
     """Returns the extension for a given MIME type."""
 
     try:
-        return MIME_TYPES[mime_type]
+        return FILE_EXTENSIONS[mime_type]
     except KeyError:
         return guess_extension(mime_type) or ''
 

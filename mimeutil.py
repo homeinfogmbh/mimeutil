@@ -16,6 +16,7 @@ __all__ = [
     'MIME_TYPES',
     'mimetype',
     'mimetype_to_ext',
+    'ext_to_mimetype',
     'getext',
     'is_xml',
     'FileMetaData'
@@ -75,6 +76,12 @@ def mimetype_to_ext(mime_type: str) -> str:
         return FILE_EXTENSIONS[mime_type]
     except KeyError:
         return guess_extension(mime_type) or ''
+
+
+def ext_to_mimetype(suffix: str) -> str:
+    """Returns the MIME type to a file extension."""
+
+    return MIME_TYPES.get(suffix, '')
 
 
 def getext(file: File) -> str:

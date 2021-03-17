@@ -81,7 +81,7 @@ def mimetype_to_ext(mime_type: str) -> str:
 def ext_to_mimetype(suffix: str) -> str:
     """Returns the MIME type to a file extension."""
 
-    return MIME_TYPES.get(suffix, '')
+    return MIME_TYPES.get(suffix.lower(), '')
 
 
 def getext(file: File) -> str:

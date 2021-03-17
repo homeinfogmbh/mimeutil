@@ -13,6 +13,7 @@ from magic.compat import FileMagic
 
 __all__ = [
     'FILE_EXTENSIONS',
+    'MIME_TYPES',
     'mimetype',
     'mimetype_to_ext',
     'getext',
@@ -35,7 +36,7 @@ FILE_EXTENSIONS = {  # Most common MIME types for fast lookup.
     'text/html': '.html',
     'text/xml': '.xml'
 }
-
+MIME_TYPES = {suffix: mimetype for mimetype, suffix in FILE_EXTENSIONS.items()}
 XML_MIMETYPES = {'application/xml', 'text/xml'}
 File = Union[bytes, str, Path, BufferedIOBase, IOBase, RawIOBase, TextIOBase]
 

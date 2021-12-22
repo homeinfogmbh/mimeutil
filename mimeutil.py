@@ -123,7 +123,7 @@ class FileMetaData(NamedTuple):
         if isinstance(item, int):
             return NamedTuple.__getitem__(self, item)
 
-        if isinstance(item, int):
+        if isinstance(item, str):
             return getattr(self, item)
 
         raise TypeError('Item must be int or str.')

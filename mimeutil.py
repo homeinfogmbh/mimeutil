@@ -121,7 +121,7 @@ class FileMetaData(NamedTuple):
     def __getitem__(self, item: Union[int, str]) -> Any:
         """Returns the respective item."""
         if isinstance(item, int):
-            return NamedTuple.__getitem__(self, item)
+            return NamedTuple.__getitem__(self, item)   # pylint: disable=E1101
 
         if isinstance(item, str):
             return getattr(self, item)

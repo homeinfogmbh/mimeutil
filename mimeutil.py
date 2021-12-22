@@ -5,7 +5,7 @@ from hashlib import sha256
 from io import BufferedIOBase, IOBase, RawIOBase, TextIOBase
 from mimetypes import guess_extension
 from pathlib import Path
-from typing import NamedTuple, Union
+from typing import Any, Iterable, NamedTuple, Union
 
 from magic import detect_from_content, detect_from_filename, detect_from_fobj
 from magic.compat import FileMagic
@@ -113,3 +113,17 @@ class FileMetaData(NamedTuple):
     def filename(self) -> str:
         """Returns a unique file name from the SHA-256 hash and suffix."""
         return self.sha256sum + self.suffix
+
+    def keys(self) -> Iterable[str]:
+        """Yields the keys."""
+        return self._fields     # pylint: disable=E1101
+
+    def __getitem__(self, item: Union[int, str]) -> Any:
+        """Returns the respective item."""
+        if isinstance(item, int):
+            return super().__getitem__(item)    # pylint: disable=E1101
+
+        if isinstance(item, int):
+            return getattr(self, item)
+
+        raise TypeError('Item must be int or str.')

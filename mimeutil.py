@@ -5,7 +5,7 @@ from hashlib import sha256
 from io import BufferedIOBase, IOBase, RawIOBase, TextIOBase
 from mimetypes import guess_extension
 from pathlib import Path
-from typing import Any, Iterable, NamedTuple, Union
+from typing import Any, IO, Iterable, NamedTuple, Union
 
 from magic import detect_from_content, detect_from_filename, detect_from_fobj
 from magic.compat import FileMagic
@@ -39,7 +39,7 @@ FILE_EXTENSIONS = {  # Most common MIME types for fast lookup.
 }
 MIME_TYPES = {suffix: mimetype for mimetype, suffix in FILE_EXTENSIONS.items()}
 XML_MIMETYPES = {'application/xml', 'text/xml'}
-File = Union[bytes, str, Path, BufferedIOBase, IOBase, RawIOBase, TextIOBase]
+File = Union[bytes, str, Path, IO]
 
 
 def _file_magic(file: File) -> FileMagic:

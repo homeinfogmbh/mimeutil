@@ -106,8 +106,11 @@ class FileMetaData(NamedTuple):
     @classmethod
     def from_bytes(cls, data: bytes) -> FileMetaData:
         """Creates file metadata from the respective bytes."""
-        return cls(sha256(data).hexdigest(), (mime_type := mimetype(data)),
-                   mimetype_to_ext(mime_type))
+        return cls(
+            sha256(data).hexdigest(),
+            (mime_type := mimetype(data)),
+            mimetype_to_ext(mime_type)
+        )
 
     @property
     def filename(self) -> str:

@@ -116,12 +116,12 @@ class FileMetaData(NamedTuple):
 
     def keys(self) -> Iterable[str]:
         """Yields the keys."""
-        return self._fields     # pylint: disable=E1101
+        return self._fields
 
     def __getitem__(self, item: Union[int, str]) -> Any:
         """Returns the respective item."""
         if isinstance(item, int):
-            return NamedTuple.__getitem__(self, item)   # pylint: disable=E1101
+            return NamedTuple.__getitem__(self, item)
 
         if isinstance(item, str):
             return getattr(self, item)

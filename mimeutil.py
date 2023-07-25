@@ -12,33 +12,33 @@ from magic.compat import FileMagic
 
 
 __all__ = [
-    'FILE_EXTENSIONS',
-    'MIME_TYPES',
-    'mimetype',
-    'mimetype_to_ext',
-    'ext_to_mimetype',
-    'getext',
-    'is_xml',
-    'FileMetaData'
+    "FILE_EXTENSIONS",
+    "MIME_TYPES",
+    "mimetype",
+    "mimetype_to_ext",
+    "ext_to_mimetype",
+    "getext",
+    "is_xml",
+    "FileMetaData",
 ]
 
 
 FILE_LIKE_OBJECTS = (BufferedIOBase, IOBase, RawIOBase, TextIOBase)
 FILE_EXTENSIONS = {  # Most common MIME types for fast lookup.
-    'image/jpeg': '.jpg',
-    'image/png': '.png',
-    'image/gif': '.gif',
-    'video/x-msvideo': '.avi',
-    'video/mpeg': '.mpg',
-    'video/quicktime': '.mov',
-    'video/x-flv': '.flv',
-    'application/pdf': '.pdf',
-    'application/xml': '.xml',
-    'text/html': '.html',
-    'text/xml': '.xml'
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/gif": ".gif",
+    "video/x-msvideo": ".avi",
+    "video/mpeg": ".mpg",
+    "video/quicktime": ".mov",
+    "video/x-flv": ".flv",
+    "application/pdf": ".pdf",
+    "application/xml": ".xml",
+    "text/html": ".html",
+    "text/xml": ".xml",
 }
 MIME_TYPES = {suffix: mimetype for mimetype, suffix in FILE_EXTENSIONS.items()}
-XML_MIMETYPES = {'application/xml', 'text/xml'}
+XML_MIMETYPES = {"application/xml", "text/xml"}
 File = Union[bytes, str, Path, IO]
 
 
@@ -46,7 +46,7 @@ def _file_magic(file: File) -> FileMagic:
     """Returns the file magic namedtuple from the respective file."""
 
     if isinstance(file, bytes):
-        return detect_from_content(file[:1024])     # Fix issue #350.
+        return detect_from_content(file[:1024])  # Fix issue #350.
 
     if isinstance(file, str):
         return _file_magic(Path(file))
@@ -60,7 +60,7 @@ def _file_magic(file: File) -> FileMagic:
     if isinstance(file, FILE_LIKE_OBJECTS):
         return detect_from_fobj(file)
 
-    raise TypeError(f'Cannot read MIME type from {type(file)}.')
+    raise TypeError(f"Cannot read MIME type from {type(file)}.")
 
 
 def mimetype(file: File) -> str:
@@ -75,13 +75,13 @@ def mimetype_to_ext(mime_type: str) -> str:
     try:
         return FILE_EXTENSIONS[mime_type]
     except KeyError:
-        return guess_extension(mime_type) or ''
+        return guess_extension(mime_type) or ""
 
 
 def ext_to_mimetype(suffix: str) -> str:
     """Returns the MIME type to a file extension."""
 
-    return MIME_TYPES.get(suffix.lower(), '')
+    return MIME_TYPES.get(suffix.lower(), "")
 
 
 def getext(file: File) -> str:
@@ -109,7 +109,7 @@ class FileMetaData(NamedTuple):
         return cls(
             sha256(data).hexdigest(),
             mime_type := mimetype(data),
-            mimetype_to_ext(mime_type)
+            mimetype_to_ext(mime_type),
         )
 
     @property
@@ -129,4 +129,4 @@ class FileMetaData(NamedTuple):
         if isinstance(item, str):
             return getattr(self, item)
 
-        raise TypeError('Item must be int or str.')
+        raise TypeError("Item must be int or str.")
